@@ -3,18 +3,22 @@ class Conexion
 {
     public static function conectar()
     {
-        $options = array(
-            PDO::MYSQL_ATTR_SSL_CA => '/var/www/html/BaltimoreCyberTrustRoot.crt.pem'
-        );
-        $db = new PDO(
-            'mysql:
-                    host=papeleriadb.mysql.database.azure.com;
-                    port=3306;
-                    dbname=db_papeleria', 
-            'administrador', 
-            'LN123456*', 
-            $options);
-        return $db;
+        $host     = 'dbpapeleria.mysql.database.azure.com';
+        $db       = 'db_papeleria';
+        $user     = 'administrador';
+        $password = 'LN123456*';
+        
+        try {
+            $link = new PDO(
+                "mysql:host=$host;dbname=$db",
+                $user,
+                $password
+            );
+            $link->exec("set names utf8");
+            return $link;
+        } catch (\Throwable $th) {
+            die("Error en la conexion: " . $th->getMessage());
+        }
     }
 }
 ?>
